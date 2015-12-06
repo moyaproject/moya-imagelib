@@ -1,0 +1,13 @@
+<moya xmlns="http://moyaproject.com"
+      xmlns:db="http://moyaproject.com/db"
+      xmlns:let="http://moyaproject.com/let"
+      xmlns:imglib="http://moyaproject.com/imagelib">
+
+    <command libname="cmd.test.clone" synopsis="test collection cloning">
+        <db:get-or-create model="moya.imagelib#Collection" let:slug="'test'" dst="collection"/>
+        <echo obj="collection"/>
+        <imglib:clone-collection collection="collection" dst="new_collection"/>
+        <echo obj="new_collection"/>
+    </command>
+
+</moya>
