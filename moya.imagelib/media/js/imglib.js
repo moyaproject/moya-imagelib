@@ -50,6 +50,10 @@ function FileUploader(url, file, callbacks)
             console.log(uuid, selected);
             callback();
         }
+        function default_on_select(uuid)
+        {
+            console.log(uuid);
+        }
 
         function default_on_change(uuid)
         {
@@ -57,6 +61,7 @@ function FileUploader(url, file, callbacks)
         }
 
         var on_pick = options.on_pick || default_picker;
+        var on_select = options.on_select || default_on_select;
         var on_change = options.on_change || default_on_change;
 
         var $manager = $(this);
@@ -111,6 +116,10 @@ function FileUploader(url, file, callbacks)
             else
             {
                 $edit_button.attr('disabled', 'disabled');
+            }
+            if(!selected_count)
+            {
+                on_select(null);
             }
         }
 
@@ -182,12 +191,12 @@ function FileUploader(url, file, callbacks)
             {
                 pick_selected();
             }
-
             return false;
         });
 
         $manager.on('click', '.moya-imglib-image', function(e){
             var $img = $(this);
+            var image_data = $img.data();
             if(!is_touch_device())
             {
                 if(single || (!e.shiftKey && !$img.hasClass('selected')) )
@@ -198,6 +207,7 @@ function FileUploader(url, file, callbacks)
             $img.toggleClass('selected');
             $header.removeClass('confirm-delete');
             update_selection();
+            on_select(image_data.uuid);
         });
 
         $manager.find('button[name=upload]').click(function(e){
@@ -206,7 +216,6 @@ function FileUploader(url, file, callbacks)
             $file_input.click();
             return false;
         });
-
 
         $form.on('click', 'button[name=cancel]', function(){
             $manager.removeClass('edit-image');
