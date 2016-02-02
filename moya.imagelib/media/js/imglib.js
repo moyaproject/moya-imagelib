@@ -65,6 +65,7 @@ function FileUploader(url, file, callbacks)
         var $edit_button = $manager.find('button.moya-imglib-action-edit');
         var $form = $manager.find('.moya-imglib-image-form');
         var data = $manager.data();
+        var single = data['single']
         var collection_uuid = data['collection'];
         var upload_url = data['upload_url'];
         var rpc_url = data['rpc_url']
@@ -189,7 +190,7 @@ function FileUploader(url, file, callbacks)
             var $img = $(this);
             if(!is_touch_device())
             {
-                if(!e.shiftKey && !$img.hasClass('selected') )
+                if(single || (!e.shiftKey && !$img.hasClass('selected')) )
                 {
                     $images.find('.moya-imglib-image').removeClass('selected');
                 }
