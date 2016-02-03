@@ -413,7 +413,8 @@ function FileUploader(url, file, callbacks)
         {
             $el.tooltip({html:true, placement:'top', delay:300});
         }
-        set_tooltip($manager.find("[data-toggle='tooltip']"))
+        set_tooltip($manager.find("[data-toggle='tooltip']"));
+        update_selection();
 
     }
 
