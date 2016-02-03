@@ -71,6 +71,7 @@ function FileUploader(url, file, callbacks)
         var $form = $manager.find('.moya-imglib-image-form');
         var data = $manager.data();
         var single = data['single']
+        var edit = data['edit'];
         var collection_uuid = data['collection'];
         var upload_url = data['upload_url'];
         var rpc_url = data['rpc_url']
@@ -262,7 +263,6 @@ function FileUploader(url, file, callbacks)
                         set_tooltip($new_image);
                         update_selection();
                         on_change(collection_uuid);
-                        /*$new_image.addClass('selected');*/
                     }
                 }
             )
@@ -303,7 +303,8 @@ function FileUploader(url, file, callbacks)
         {
             var params = {
                 "collection": collection_uuid,
-                "image": image
+                "image": image,
+                "edit": edit
             }
             rpc.call(
                 'image.manager_form',
@@ -360,7 +361,12 @@ function FileUploader(url, file, callbacks)
         {
           var $progress = $(progress_template);
           $images.prepend($progress);
-          var uploader = new FileUploader(upload_url, file,
+          var image_upload_url = upload_url;
+          if(edit)
+          {
+            image_upload_url += '?edit=yes'
+          }
+          var uploader = new FileUploader(image_upload_url, file,
           {
               "progress": function(progress)
               {

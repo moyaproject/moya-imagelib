@@ -1,7 +1,7 @@
 {% singleline %}
 <div id="${managerid}"
 {% attrib class=['moya-imglib-manager', 'clearfix', fullsize ? 'moya-imglib-fullsize': None] %}
-{% data-attrib collection=collection.uuid, upload_url=upload_url, rpc_url=.appurls.edit.jsonrpc, single=json:single %}>
+{% data-attrib collection=collection.uuid, upload_url=upload_url, rpc_url=.appurls.edit.jsonrpc, single=json:single, edit=json:edit %}>
 {% end %}
 
     <script type="text/template" class="progress-template">
@@ -16,6 +16,7 @@
 
     <script type="text/template" class="upload-form-template">
         <form enctype="multipart/form-data" class="upload invisible">
+            <input type="hidden" name="edit" value="${edit ? 'yes' : 'no'}"/>
             <input type="file" name="file" accept="image/*" multiple/>
         </form>
     </script>
