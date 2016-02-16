@@ -10,10 +10,12 @@
             <image:resize-to-fit width="120" height="120" />
         </tn:processor>
 
+        <!--
         <tn:processor name="square_tile" version="3">
             <image:square/>
             <image:resize-to-fit width="140" height="140"/>
         </tn:processor>
+    -->
 
         <tn:processor name="manager_tile" quality="70" version="6">
             <image:square/>

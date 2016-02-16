@@ -50,9 +50,15 @@ function FileUploader(url, file, callbacks)
         var $file_input = $upload_form.find('input[type=file]');
         var $controls = $self.find('.moya-imglib-upload-controls');
 
-
         $controls.click(function(e){
             $file_input.click();
+        });
+
+         $file_input.change(function(){
+            var files = $file_input.get(0).files;
+            alert(files);
+            upload_files(files);
+            $upload_form[0].reset()
         });
 
     }
