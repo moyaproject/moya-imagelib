@@ -343,3 +343,76 @@
 .moya-imglib-manager.edit-image .moya-imglib-header {
     display: none;
 }
+
+.moya-imglib-uploader
+{
+    width:160px;
+    height:120px;
+
+    margin:8px;
+    overflow:hidden;
+}
+
+.moya-imglib-uploader form
+{
+    position:absolute;
+}
+
+.moya-imglib-uploader .moya-imglib-upload-image
+{
+    background-color:#f6f6f6;
+    padding:2px;
+    border:1px solid #e2e2e2;
+    width:164px;
+    height:124px;
+    position:absolute;
+    overflow:hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.moya-imglib-uploader .moya-imglib-upload-image img
+{
+    max-height: 124px;  
+    max-width: 164px;  
+    position: absolute;  
+    top: 0;  
+    bottom: 0;  
+    left: 0;  
+    right: 0;  
+    margin: auto;  
+}
+
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.noya-imglib-uploader .upload-icon
+{
+    font-size:48px;
+}
+
+.moya-imglib-uploader .moya-imglib-upload-controls
+{
+    width:164px;
+    height:124px;
+    position:absolute;
+    font-size:32px;
+    text-align: center;
+    line-height:120px;
+    background-color:rgba(0,0,0,0.5);
+    color:#fff;
+    opacity:0.0;
+    transition: opacity 0.2s;
+}
+
+.moya-imglib-uploader .moya-imglib-upload-controls:hover
+{
+    opacity:1.0;
+    transition: opacity 0.2s;
+    cursor:pointer;
+}
+

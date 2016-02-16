@@ -35,6 +35,7 @@
 
     <content libname="content.tests">
         <section name="body">
+            <imglib:uploader collection="collection" image="collection.images.0"/>
             <w:select>
                 <for src="collection.images" dst="image">
                     <w:option value="image.pk">
@@ -43,7 +44,8 @@
                 </for>
             </w:select>
             <imglib:manager collection="collection" picker="yes"/>
-            <imglib:manager collection="collection" single="yes" edit="no" select="[collection.images.0.uuid]"/>
+            <imglib:manager collection="collection" single="yes" edit="no" select="[collection.images.0.uuid]"
+                on_selection="function(uuid){alert(uuid);}"/>
         </section>
     </content>
 </moya>

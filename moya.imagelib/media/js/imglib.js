@@ -43,14 +43,33 @@ function FileUploader(url, file, callbacks)
 
 (function($) {
 
+    $.fn.imguploader = function(options)
+    {
+        var $self = $(this);
+        var $upload_form = $self.find('form.upload');
+        var $file_input = $upload_form.find('input[type=file]');
+        var $controls = $self.find('.moya-imglib-upload-controls');
+
+
+        $controls.click(function(e){
+            $file_input.click();
+        });
+
+    }
+
+})(jQuery);
+
+
+(function($) {
+
     $.fn.imgmanager = function(options)
     {
-        function default_picker(uuid, selected, callback)
+        function default_on_pick(uuid, selected, callback)
         {
             console.log(uuid, selected);
             callback();
         }
-        function default_on_select(uuid)
+        function default_on_selection(uuid)
         {
             console.log(uuid);
         }
@@ -60,8 +79,8 @@ function FileUploader(url, file, callbacks)
             console.log(uuid, 'changed')
         }
 
-        var on_pick = options.on_pick || default_picker;
-        var on_select = options.on_select || default_on_select;
+        var on_pick = options.on_pick || default_on_pick;
+        var on_selection = options.on_selection || default_on_selection;
         var on_change = options.on_change || default_on_change;
 
         var $manager = $(this);
@@ -120,7 +139,7 @@ function FileUploader(url, file, callbacks)
             }
             if(!selected_count)
             {
-                on_select(null);
+                on_selection(null);
             }
         }
 
@@ -208,7 +227,7 @@ function FileUploader(url, file, callbacks)
             $img.toggleClass('selected');
             $header.removeClass('confirm-delete');
             update_selection();
-            on_select(image_data.uuid);
+            on_selection(image_data.uuid);
         });
 
         $manager.find('button[name=upload]').click(function(e){
