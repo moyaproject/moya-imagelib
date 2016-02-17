@@ -2,7 +2,7 @@
 <div class="col-md-3">
     <p>
         <a href="{% url 'serve_collection_image' with collection=image.collection.uuid, filename=image.filename %}" target="_blank">
-            <img width="100%" src="${image.file|'thumbnail'(processor='manager_form')}"/>
+            <img width="100%" src="${image.file|'thumbnail'(processor='large_thumbnail')}"/>
         </a>
     </p>
     <h5>${image.title}</h5>

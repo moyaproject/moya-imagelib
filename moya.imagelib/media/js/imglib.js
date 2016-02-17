@@ -49,6 +49,10 @@ function FileUploader(url, file, callbacks)
         var $upload_form = $self.find('form.upload');
         var $file_input = $upload_form.find('input[type=file]');
         var $controls = $self.find('.moya-imglib-upload-controls');
+        var $image_container = $self.find('.moya-imglib-upload-image');
+
+        var data = $self.data();
+        var upload_url = data.upload_url;
 
         $controls.click(function(e){
             $file_input.click();
@@ -56,10 +60,56 @@ function FileUploader(url, file, callbacks)
 
          $file_input.change(function(){
             var files = $file_input.get(0).files;
-            alert(files);
-            upload_files(files);
+            begin_upload(files[0]);
             $upload_form[0].reset()
         });
+
+        function begin_upload(file)
+        {
+
+            var uploader = new FileUploader(upload_url, file,
+            {
+                "progress": function(progress)
+                {
+                    console.log(progress);
+                },
+                "success": function(result)
+                {
+                    console.log(result);
+                    /* set_progress($progress, 1); */
+                    var json_result = JSON.parse(result);
+
+                    if (!json_result.success)
+                    {
+                        /* TODO: Report message */
+                         $progress.remove();
+                        return;
+                    }
+
+                    var replace_thumb = function(){
+                        $image_container.find('img').replaceWith($(json_result.image_html));
+                        return;
+                        var $image = $(json_result.image_html);
+                        $image.css('opacity', '0');
+                        var $new_image = $progress.replaceWith($image);
+                        $image.animate({opacity: 1.0}, 250);
+                        set_tooltip($image);
+                    }
+
+                    var image = new Image();
+                    image.src = json_result.thumb_url;
+
+                    if (image.complete)
+                    {
+                        replace_thumb();
+                    }
+                    else {
+                        image.addEventListener('load', replace_thumb);
+                    }
+                    /* on_change(collection_uuid); */
+                  }
+            });
+        }
 
     }
 

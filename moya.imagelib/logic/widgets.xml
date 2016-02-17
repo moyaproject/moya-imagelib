@@ -74,6 +74,7 @@ $("#${uploaderid}").imguploader({
 
 });
         </js>
+        <get-url name="uploader_upload" dst="upload_url" let:collection="collection.uuid" />
 
     </widget>
 

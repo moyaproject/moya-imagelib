@@ -20,7 +20,7 @@
         <db:get-or-create model="#Collection" let:slug="'test'" dst="collection"/>
     </view>
 
-    <view libname="view.picker.upload">
+    <macro libname="macro.upload">
         <db:get-required model="#Collection" let:uuid=".url.collection" dst="collection"/>
         <get-enum enum="#enum.image.type" dst="ImageType"/>
         <let
@@ -41,13 +41,11 @@
             <serve-json obj="result"/>
         </catch>
         <let exif="image_bitmap.exif"/>
-
-        <if test="exif">
-            <let taken="parsedatetime:[exif.DateTimeOriginal, '%Y:%m:%d %H:%M:%S'] or None"
-                creator="exif.Artist"
-                copyright="exif.Copyright"/>
-        </if>
-
+        <let if="exif" 
+            taken="parsedatetime:[exif.DateTimeOriginal, '%Y:%m:%d %H:%M:%S'] or None"
+            creator="exif.Artist"
+            copyright="exif.Copyright"/>
+    
         <let copyright=".user.display_name or ''" if="not copyright"/>
         <str dst="copyright" if="copyright">© ${taken.year or .now.year} ${copyright}</str>
 
@@ -93,23 +91,35 @@
         </catch>
 
         <!-- pre-render thumbnails -->
-        <if test=".app.settings.thumbnails">
-            <for src=".app.settings.thumbnails.list" dst="thumb">
-                <timer msg="pre-rendered thumbnails '${thumb}'">
-                    <tn:generate thumbnails="${thumb}" path="image.file" image="image_bitmap" overwrite="no"/>
-                </timer>
-            </for>
-        </if>
-        <str dst="thumb_url">${image.file|'thumbnail'(processor='manager_tile')}</str>
+ 
+        <for src=".app.settings.thumbnails.list" dst="thumb" if=".app.settings.thumbnails">
+            <timer msg="pre-rendered thumbnails '${thumb}'">
+                <tn:generate thumbnails="${thumb}" path="image.file" image="image_bitmap" overwrite="no"/>
+            </timer>
+        </for>
+        <str dst="thumb_url">${image.file|'thumbnail'(processor=thumbnail)}</str>
 
-        <render-template template="widgets/manager/manager_image.html" dst="image_html"
+        <render-template template="${template}" dst="image_html"
             let:image="image"
             let:edit="edit"/>
         <dict dst="result"
             let:success="True"
             let:image_html="image_html"
-            let:thumb_url="thumb_url"/>
+            let:thumb_url="thumb_url"
+            let:image_id="image.uuid"/>
         <serve-json obj="result"/>
+    </macro>
+
+    <view libname="view.picker.upload">
+        <let-str template="widgets/manager/manager_image.html"
+            thumbnail="manager_tile"/>
+        <defer to="#macro.upload"/>
+    </view>
+
+    <view libname="view.uploader.upload">
+        <let-str template="widgets/uploader/uploader_image.html"
+            thumbnail="large_thumbnail"/>
+        <defer to="#macro.upload"/>
     </view>
 
     <view libname="view.image.serve">

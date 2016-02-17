@@ -1,10 +1,11 @@
 
-<div id="${uploaderid}" class="moya-imglib-uploader" title="Click to upload" data-toggle="tooltip">
-    <form enctype="multipart/form-data" class="upload invisible">
+<div id="${uploaderid}" class="moya-imglib-uploader" title="Click to upload" data-toggle="tooltip"
+{% data-attrib collection=collection.uuid, upload_url=upload_url, rpc_url=.appurls.edit.jsonrpc %}>
+    <form enctype="multipart/form-data" class="upload invisible" >
         <input type="file" name="file" accept="image/*"/>
     </form>
     <div class="moya-imglib-upload-image">
-        <img width="160" src="${image.file|'thumbnail'(processor='manager_form')}"/>
+        <img width="160" src="${image.file|'thumbnail'(processor='large_thumbnail')}"/>
     </div>
     <div class="moya-imglib-upload-controls">
         <i class="upload-icon glyphicon glyphicon-cloud-upload"></i>
