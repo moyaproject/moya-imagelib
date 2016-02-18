@@ -91,13 +91,14 @@
         </catch>
 
         <!-- pre-render thumbnails -->
- 
         <for src=".app.settings.thumbnails.list" dst="thumb" if=".app.settings.thumbnails">
             <timer msg="pre-rendered thumbnails '${thumb}'">
                 <tn:generate thumbnails="${thumb}" path="image.file" image="image_bitmap" overwrite="no"/>
             </timer>
         </for>
         <str dst="thumb_url">${image.file|'thumbnail'(processor=thumbnail)}</str>
+
+        <db:delete src="replace_image" if="replace_image"/>
 
         <render-template template="${template}" dst="image_html"
             let:image="image"
@@ -111,12 +112,22 @@
     </macro>
 
     <view libname="view.picker.upload">
+        <db:get-required model="#Collection" let:uuid=".url.collection" dst="collection"/>
         <let-str template="widgets/manager/manager_image.html"
             thumbnail="manager_tile"/>
         <defer to="#macro.upload"/>
     </view>
 
     <view libname="view.uploader.upload">
+        <db:get-required model="#Collection" let:uuid=".url.collection" dst="collection"/>
+
+        <if test=".request.GET.replace">        
+            <db:query src="collection.images" dst="images"
+                filter="#Image.uuid == .request.GET.replace and #Image.collection == collection"/>
+            <serve-json obj="{'status': 'fail'}" if="not images"/>
+            <let replace_image="images.first"/>
+        </if>
+    
         <let-str template="widgets/uploader/uploader_image.html"
             thumbnail="large_thumbnail"/>
         <defer to="#macro.upload"/>

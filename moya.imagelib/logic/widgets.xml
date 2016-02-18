@@ -69,6 +69,12 @@ $("#${managerid}").imgmanager({
             <attribute name="image" type="expression"/>
         </signature>
         <let uploaderid=".content.id" />
+        <css>
+.moya-imglib-progress .progress-bar .complete
+{
+    background-color:${.theme.colors.selected.bg};
+}
+        </css>
         <js>
 $("#${uploaderid}").imguploader({
 

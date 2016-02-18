@@ -8,8 +8,8 @@ function FileUploader(url, file, callbacks)
     var reader = new FileReader();
     var xhr = new XMLHttpRequest();
 
-    var form_data = new FormData()
-    form_data.append('image', file)
+    var form_data = new FormData();
+    form_data.append('image', file);
 
     self.xhr = xhr;
 
@@ -50,63 +50,75 @@ function FileUploader(url, file, callbacks)
         var $file_input = $upload_form.find('input[type=file]');
         var $controls = $self.find('.moya-imglib-upload-controls');
         var $image_container = $self.find('.moya-imglib-upload-image');
+        var $progress = $self.find('.moya-imglib-progress');
+        var $progress_bar = $progress.find('.progress-bar .complete');
 
         var data = $self.data();
         var upload_url = data.upload_url;
 
         $controls.click(function(e){
+            e.preventDefault();
             $file_input.click();
         });
 
-         $file_input.change(function(){
+         $file_input.change(function(e){
+            e.preventDefault();
             var files = $file_input.get(0).files;
             begin_upload(files[0]);
             $upload_form[0].reset()
+            return false;
         });
+
+        function set_progress(progress)
+        {
+            var w = Math.ceil(100.0 * (0.95 * progress + 0.05));
+            var width_percentage = '' + w + '%';
+            $progress_bar.css('width', width_percentage);
+        }
 
         function begin_upload(file)
         {
+            set_progress(0);
+            $self.addClass('loading');
+            var url = upload_url + "?replace=" + (data.image || '');
 
-            var uploader = new FileUploader(upload_url, file,
+            var uploader = new FileUploader(url, file,
             {
                 "progress": function(progress)
                 {
-                    console.log(progress);
+                    set_progress(progress);
                 },
-                "success": function(result)
+                "success": function(json_result)
                 {
-                    console.log(result);
-                    /* set_progress($progress, 1); */
-                    var json_result = JSON.parse(result);
+                    $self.removeClass('loading');
+                    var result = JSON.parse(json_result);
 
-                    if (!json_result.success)
+                    if (!result.success)
                     {
                         /* TODO: Report message */
-                         $progress.remove();
+                        set_progress(0);
                         return;
                     }
 
-                    var replace_thumb = function(){
-                        $image_container.find('img').replaceWith($(json_result.image_html));
-                        return;
-                        var $image = $(json_result.image_html);
-                        $image.css('opacity', '0');
-                        var $new_image = $progress.replaceWith($image);
-                        $image.animate({opacity: 1.0}, 250);
-                        set_tooltip($image);
+                    data.image = result.image_id;
+
+                    var replace_thumb = function()
+                    {
+                        $image_container.replaceWith($(result.image_html));
+                        $image_container = $self.find('.moya-imglib-upload-image');
                     }
 
                     var image = new Image();
-                    image.src = json_result.thumb_url;
+                    image.src = result.thumb_url;
 
                     if (image.complete)
                     {
                         replace_thumb();
                     }
-                    else {
+                    else
+                    {
                         image.addEventListener('load', replace_thumb);
                     }
-                    /* on_change(collection_uuid); */
                   }
             });
         }
