@@ -57,6 +57,10 @@ function FileUploader(url, file, callbacks)
         var upload_url = data.upload_url;
 
         $controls.click(function(e){
+            if($self.hasClass('loading'))
+            {
+                return;
+            }
             e.preventDefault();
             $file_input.click();
         });

@@ -404,7 +404,7 @@ background-position: 0 0, 16px 16px;
     transition: opacity 0.2s;
 }
 
-.moya-imglib-uploader .moya-imglib-upload-controls:hover
+.moya-imglib-uploader:not(.loading) .moya-imglib-upload-controls:hover
 {
     opacity:1.0;
     transition: opacity 0.2s;
