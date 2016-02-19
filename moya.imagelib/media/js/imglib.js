@@ -115,7 +115,7 @@ function FileUploader(url, file, callbacks)
                 {
                     var result = JSON.parse(json_result);
 
-                    if (!result.success)
+                    if (result.state != 'ok')
                     {
                         $self.removeClass('loading');
                         set_progress(0);
@@ -501,7 +501,7 @@ function FileUploader(url, file, callbacks)
                   set_progress($progress, 1);
                   var json_result = JSON.parse(result);
 
-                  if (!json_result.success)
+                  if (json_result.state != 'ok')
                   {
                       /* TODO: Report message */
                       $progress.remove();

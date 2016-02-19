@@ -32,10 +32,9 @@
         <img:read file="file" dst="image_bitmap" filename="filename"/>
         <catch exception="image.*">
             <log-warn>Unable to read image</log-warn>
-            <serve-json-object
-                let:success="no"
-                let:error="'readfail'"
-                let:msg="'unable to read image'"/>
+            <serve-json-object>
+                <let-str state="readfail" msg="unable to read image"/>
+            </serve-json-object>
         </catch>
         <let exif="image_bitmap.exif"/>
         <let if="exif" 
@@ -53,10 +52,9 @@
 
         <catch exception="*" dst="error">
             <log-warn>Unable to store image file (${error.msg})</log-warn>
-            <serve-json-object
-                let:success="no"
-                let:error="'writefail'"
-                let:msg="'unable to store image file'"/>
+            <serve-json-object>
+                <let-str state="writefail" msg="unable to store image file"/>
+            </serve-json-object>
         </catch>
 
         <db:atomic>
@@ -80,10 +78,9 @@
         </db:atomic>
         <catch exception="*" dst="error">
             <log-error>Unable to upload image (${error.msg})</log-error>
-            <serve-json-object
-                let:error="'savefail'"
-                let:msg="'upload failed'"
-                let:success="no"/>
+            <serve-json-object>
+                <let-str state="savefail" msg="upload failed"/>
+            </serve-json-object>
         </catch>
 
         <!-- pre-render thumbnails -->
@@ -109,21 +106,33 @@
         <render-template template="${template}" dst="image_html"
             let:image="image"
             let:edit="edit"/>
-        <serve-json-object
-            let:success="True"
-            let:image_html="image_html"
-            let:thumb_url="thumb_url"
-            let:image_id="image.uuid"/>
+
+        <serve-json-object>
+            <let state="'ok'"
+                image_html="image_html"
+                thumb_url="thumb_url"
+                image_id="image.uuid"/>
+        </serve-json-object>
     </macro>
 
-    <view libname="view.picker.upload" requires="permission:.app.settings.manage_permission">
+    <view libname="view.picker.upload">
+
+        <serve-json-object if="not permission:.app.settings.manage_permission">
+            <let-str state="nopermission" msg="no permission to upload"/>
+        </serve-json-object>
+
         <db:get-required model="#Collection" let:uuid=".url.collection" dst="collection"/>
         <let-str template="widgets/manager/manager_image.html"
             thumbnail="manager_tile"/>
         <defer to="#macro.upload"/>
     </view>
 
-    <view libname="view.uploader.upload" requires="permission:.app.settings.uploader_permission">
+    <view libname="view.uploader.upload">
+
+        <serve-json-object if="not permission:.app.settings.uploader_permission">
+            <let-str state="nopermission" msg="no permission to upload"/>
+        </serve-json-object>
+
         <let slug=".url.slug"/>
         <db:get-required model="#Collection" let:uuid=".url.collection" dst="collection"/>
         <db:query src="collection.images" dst="images"
