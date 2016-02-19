@@ -1,4 +1,5 @@
 {# rendered in an rpc call #}
+{% if image %}
 <div class="col-md-3">
     <p>
         <a href="{% url 'serve_collection_image' with collection=image.collection.uuid, filename=image.filename %}" target="_blank">
@@ -34,3 +35,19 @@
 <div class="col-md-9">
     <div class="well">{% render form %}</div>
 </div>
+{% else %}
+<div class="col-md-12">
+    <div class="alert alert-warning">
+        <b>The image was not found.</b>
+        <br><br>
+        It may have been deleted. Try reloading the page.
+    </div>
+
+    <p>
+        <button name="cancel" class="btn btn-default btn-md">
+            Back to Manager
+        </button>
+    </p>
+
+</div>
+{% endif %}

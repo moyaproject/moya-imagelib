@@ -36,7 +36,6 @@ $("#${managerid}").imgmanager({
     on_selection: ${on_selection or 'null'}
 });
         </js>
-        <!-- <js>$("#${managerid} [data-toggle='tooltip']").tooltip({html:true, placement:'top', delay:500});</js> -->
         <get-url name="picker_upload" dst="upload_url" let:collection="collection.uuid" />
         <db:query src="collection.images" model="#Image" orderby="-uploaded_time" dst="images" />
     </widget>
@@ -66,22 +65,17 @@ $("#${managerid}").imgmanager({
     <widget name="uploader" template="widgets/uploader/uploader.html">
         <signature>
             <attribute name="collection" type="expression"/>
-            <attribute name="image" type="expression"/>
+            <attribute name="slug" type="text"/>
         </signature>
         <let uploaderid=".content.id" />
-        <css>
-.moya-imglib-progress .progress-bar .complete
-{
-    background-color:${.theme.colors.selected.bg};
-}
-        </css>
+
+        <db:get model="#Image" dst="image"
+            let:collection="collection" let:slug="slug" />
         <js>
-$("#${uploaderid}").imguploader({
-
-});
+$("#${uploaderid}").imguploader({});
         </js>
-        <get-url name="uploader_upload" dst="upload_url" let:collection="collection.uuid" />
-
+        <get-url name="uploader_upload" dst="upload_url"
+            let:collection="collection.uuid" let:slug="slug"/>
     </widget>
 
 </moya>

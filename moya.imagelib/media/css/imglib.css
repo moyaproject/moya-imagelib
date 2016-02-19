@@ -461,3 +461,10 @@ background-position: 0 0, 16px 16px;
 
     transition: width 0.5s;
 }
+
+.moya-imglib-uploader .moya-imglib-error
+{
+    display:none;
+    position:absolute;
+    width:auto;
+}

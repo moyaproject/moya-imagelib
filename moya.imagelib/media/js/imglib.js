@@ -25,9 +25,16 @@ function FileUploader(url, file, callbacks)
     }, false);
 
     xhr.onreadystatechange = function(){
-        if(xhr.readyState==4 && xhr.status==200)
+        if(xhr.readyState==4)
         {
-            callbacks.success(xhr.responseText);
+            if(xhr.status==200)
+            {
+                callbacks.success(xhr.responseText);
+            }
+            else
+            {
+                callbacks.error(xhr);
+            }
         }
     }
 
@@ -52,11 +59,17 @@ function FileUploader(url, file, callbacks)
         var $image_container = $self.find('.moya-imglib-upload-image');
         var $progress = $self.find('.moya-imglib-progress');
         var $progress_bar = $progress.find('.progress-bar .complete');
+        var $error = $self.find('.moya-imglib-error');
 
         var data = $self.data();
         var upload_url = data.upload_url;
 
+        $error.find('button.close').click(function(){
+            $error.hide();
+        });
+
         $controls.click(function(e){
+            $error.hide();
             if($self.hasClass('loading'))
             {
                 return;
@@ -65,7 +78,7 @@ function FileUploader(url, file, callbacks)
             $file_input.click();
         });
 
-         $file_input.change(function(e){
+        $file_input.change(function(e){
             e.preventDefault();
             var files = $file_input.get(0).files;
             begin_upload(files[0]);
@@ -78,6 +91,12 @@ function FileUploader(url, file, callbacks)
             var w = Math.ceil(100.0 * (0.95 * progress + 0.05));
             var width_percentage = '' + w + '%';
             $progress_bar.css('width', width_percentage);
+        }
+
+        function set_error(msg)
+        {
+            $error.find('.error-text').text(msg);
+            $error.show();
         }
 
         function begin_upload(file)
@@ -94,13 +113,13 @@ function FileUploader(url, file, callbacks)
                 },
                 "success": function(json_result)
                 {
-                    $self.removeClass('loading');
                     var result = JSON.parse(json_result);
 
                     if (!result.success)
                     {
-                        /* TODO: Report message */
+                        $self.removeClass('loading');
                         set_progress(0);
+                        set_error(result.msg || 'upload failed');
                         return;
                     }
 
@@ -108,6 +127,7 @@ function FileUploader(url, file, callbacks)
 
                     var replace_thumb = function()
                     {
+                        $self.removeClass('loading');
                         $image_container.replaceWith($(result.image_html));
                         $image_container = $self.find('.moya-imglib-upload-image');
                     }
@@ -123,7 +143,20 @@ function FileUploader(url, file, callbacks)
                     {
                         image.addEventListener('load', replace_thumb);
                     }
-                  }
+                },
+                "error": function(xhr)
+                {
+                    $self.removeClass('loading');
+                    set_progress(0);
+                    if (xhr.status==413)
+                    {
+                        set_error('image is too large');
+                    }
+                    else
+                    {
+                        set_error('the server encountered an error during the upload');
+                    }
+                }
             });
         }
 

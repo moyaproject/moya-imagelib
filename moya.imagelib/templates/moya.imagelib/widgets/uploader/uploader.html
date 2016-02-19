@@ -4,8 +4,8 @@
     <form enctype="multipart/form-data" class="upload invisible" >
         <input type="file" name="file" accept="image/*"/>
     </form>
-    <div class="moya-imglib-upload-image" {% if image %}style="background-image:url(${image.file|'thumbnail'(processor='large_thumbnail')})"{% endif %}>
-
+    <div class="moya-imglib-upload-image"
+        {% if image %}style="background-image:url(${image.file|'thumbnail'(processor='large_thumbnail')})"{% endif %}>
     </div>
     <div class="moya-imglib-upload-controls">
         <i class="upload-icon glyphicon glyphicon-cloud-upload"></i>
@@ -13,6 +13,12 @@
     <div class="moya-imglib-progress">
         <div class="progress-bar">
             <div style="width:5%" class="complete"></div>
+        </div>
+    </div>
+    <div class="moya-imglib-error">
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+            <strong>Image upload failed</strong>&mdash;<span class="error-text"></span>
         </div>
     </div>
 </div>
