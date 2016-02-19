@@ -10,10 +10,7 @@
     </mountpoint>
 
     <mountpoint libname="mountpoint.edit">
-        <url route="*">
-            <forbidden if="not permission:.app.settings.edit_permission.list" />
-        </url>
-        
+
         <url route="/manage/{collection_name}/" methods="GET,POST" view="#view.collection.manage" name="manage" />
 
         <url route="/picker-upload/{collection}/" methods="POST" view="#view.picker.upload" name="picker_upload" />
