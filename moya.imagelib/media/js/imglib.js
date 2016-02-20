@@ -103,7 +103,7 @@ function FileUploader(url, file, callbacks)
         {
             set_progress(0);
             $self.addClass('loading');
-            var url = upload_url + "?replace=" + (data.image || '');
+            var url = upload_url;
 
             var uploader = new FileUploader(url, file,
             {
@@ -154,7 +154,7 @@ function FileUploader(url, file, callbacks)
                     }
                     else
                     {
-                        set_error('the server encountered an error during the upload');
+                        set_error('please try again');
                     }
                 }
             });

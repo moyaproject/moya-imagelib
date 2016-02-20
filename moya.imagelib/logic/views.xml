@@ -138,6 +138,16 @@
         <db:query src="collection.images" dst="images"
             filter="#Image.slug == slug and #Image.collection == collection"/>
         <let replace_image="images.first or None"/>
+
+        <let check="yes"/>
+        <call macro="${.app.settings.uploader_check}" dst="check" if=".app.settings.uploader_check"
+            let:collection="collection"
+            let:slug=".url.slug"
+            let:replace_image="replace_image"/>
+
+        <serve-json-object if="not check">
+            <let-str state="checkfailed" msg="you have no permission to do that"/>
+        </serve-json-object>
      
         <let-str template="widgets/uploader/uploader_image.html"
             thumbnail="large_thumbnail"/>
