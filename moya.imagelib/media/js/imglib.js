@@ -61,6 +61,12 @@ function FileUploader(url, file, callbacks)
         var $progress_bar = $progress.find('.progress-bar .complete');
         var $error = $self.find('.moya-imglib-error');
 
+        function default_on_change(uuid)
+        {
+            console.log('uploaded', uuid);
+        }
+        var on_change = options.on_change || default_on_change;
+
         var data = $self.data();
         var upload_url = data.upload_url;
 
@@ -125,11 +131,12 @@ function FileUploader(url, file, callbacks)
 
                     data.image = result.image_id;
 
-                    var replace_thumb = function()
+                    var replace_thumb = function(uuid)
                     {
                         $self.removeClass('loading');
                         $image_container.replaceWith($(result.image_html));
                         $image_container = $self.find('.moya-imglib-upload-image');
+                        on_change(uuid)
                     }
 
                     var image = new Image();
@@ -137,11 +144,11 @@ function FileUploader(url, file, callbacks)
 
                     if (image.complete)
                     {
-                        replace_thumb();
+                        replace_thumb(result.image_id);
                     }
                     else
                     {
-                        image.addEventListener('load', replace_thumb);
+                        image.addEventListener('load', function(){replace_thumb(result.image_id)});
                     }
                 },
                 "error": function(xhr)
