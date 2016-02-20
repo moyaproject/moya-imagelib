@@ -48,7 +48,11 @@ $("#${managerid}").imgmanager({
             <attribute name="field" type="expression" default="field"/>
             <attribute name="key" type="text" default="id">The key on the Image object to write in the input</attribute>
         </signature>
+
         <include-css path="css/imglib.css"/>
+        <include-js path="js/jsonrpc.js" from="moya.jsonrpc" />
+        <include-js path="js/imglib.js"/>
+
         <w:select field="field">
             <w:option value="''">
                 <node template="emptyoption.html" let:text="text"/>
@@ -68,6 +72,10 @@ $("#${managerid}").imgmanager({
             <attribute name="slug" type="text"/>
             <attribute name="on_change" default="" type="text"/>
         </signature>
+
+        <include-css path="css/imglib.css"/>
+        <include-js path="js/imglib.js"/>
+
         <let uploaderid=".content.id" />
 
         <db:get model="#Image" dst="image"

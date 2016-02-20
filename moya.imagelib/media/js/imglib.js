@@ -136,7 +136,7 @@ function FileUploader(url, file, callbacks)
                         $self.removeClass('loading');
                         $image_container.replaceWith($(result.image_html));
                         $image_container = $self.find('.moya-imglib-upload-image');
-                        on_change(uuid)
+                        on_change(uuid);
                     }
 
                     var image = new Image();
