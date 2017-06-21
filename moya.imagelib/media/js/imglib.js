@@ -112,6 +112,7 @@ function FileUploader(url, file, callbacks)
 
         function begin_upload(file)
         {
+            $progress.removeClass('processing');
             set_progress(0);
             $self.addClass('loading');
             var url = upload_url;
@@ -135,12 +136,14 @@ function FileUploader(url, file, callbacks)
                     }
 
                     data.image = result.image_id;
+                    $progress.addClass('processing');
 
                     var replace_thumb = function(uuid)
                     {
                         $self.removeClass('loading');
                         $image_container.replaceWith($(result.image_html));
                         $image_container = $self.find('.moya-imglib-upload-image');
+                        $progress.removeClass('processing');
                         on_change(uuid);
                     }
 
@@ -364,7 +367,7 @@ function FileUploader(url, file, callbacks)
             return false;
         });
 
-        $form.on('submit', function(e){
+        $form.on('click', 'button[type=submit]', function(e){
             e.preventDefault();
             var form_data = {};
             $form.find('input,textarea,select').each(function(){
@@ -534,6 +537,7 @@ function FileUploader(url, file, callbacks)
                       $progress.remove();
                       return;
                   }
+                  $progress.addClass('processing');
 
                   var replace_thumb = function(){
                       var $image = $(json_result.image_html);
