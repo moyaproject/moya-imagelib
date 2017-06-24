@@ -121,6 +121,10 @@ function FileUploader(url, file, callbacks)
             {
                 "progress": function(progress)
                 {
+                    if(progress > 0.99)
+                    {
+                        $progress.addClass('processing');
+                    }
                     set_progress(progress);
                 },
                 "success": function(json_result)
@@ -523,7 +527,11 @@ function FileUploader(url, file, callbacks)
           {
               "progress": function(progress)
               {
-                  set_progress($progress, progress);
+                    if(progress > .99)
+                    {
+                        $progress.addClass('processing');
+                    }
+                    set_progress($progress, progress);
               },
               "success": function(result)
               {

@@ -23,6 +23,12 @@
                 <i class="glyphicon glyphicon-cloud-upload"></i>
                 <span class="hidden-xs">Upload</span>
             </button>
+            {%- if picker %}
+            <button disabled="disabled" type="button" title="${picker_text}" class="btn btn-success moya-imglib-action moya-imglib-action-pick" data-action="pick">
+                <i class="glyphicon glyphicon-flag"></i>
+                <span class="hidden-xs">${picker_text}</span>
+            </button>
+            {%- endif %}
         </div>
 
         <div class="moya-imglib-select">
@@ -79,13 +85,9 @@
         {%- for image in images %}
         {% include "widgets/manager/manager_image.html" %}
         {%- endfor %}
-        {# {% include "widgets/manager/fragments/progress.html" %} #}
     </div>
 
     <div class="moya-imglib-image-form row">
-        <br>
-        <form style="form form-horizontal">
-            <p>Form goes here</p>
-        </form>
+
     </div>
 </div>

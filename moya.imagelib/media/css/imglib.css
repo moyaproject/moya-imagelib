@@ -6,6 +6,9 @@
     /*overflow:hidden;*/
     box-sizing:padding-box;
 }
+.moya-imglib-manager .form-actions {
+    margin-bottom:0px;
+}
 .moya-imglib-error
 {
     display:none;
