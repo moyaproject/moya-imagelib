@@ -592,7 +592,12 @@ function FileUploader(url, file, callbacks)
 
         function set_tooltip($el)
         {
-            $el.tooltip({html:true, placement:'top', delay:300});
+            $el.tooltip({
+                html:true,
+                trigger:'hover',
+                placement:'top',
+                delay: {show:50, hide:100}
+            });
         }
         set_tooltip($manager.find("[data-toggle='tooltip']"));
         update_selection();
